@@ -1,3 +1,4 @@
+import { FormUtils } from './../../../utils/form-utils';
 import { JsonPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import {
@@ -17,6 +18,7 @@ export class BasicPageComponent {
   // ** la mejor manera de crear el formulario es la siguiente
   private fb = inject(FormBuilder);
 
+  formUtils = FormUtils;
   myForm: FormGroup = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(3)], []],
     price: [0, [Validators.required, Validators.min(10)]],
@@ -30,29 +32,29 @@ export class BasicPageComponent {
   //   inStorage: new FormControl(0),
   // });
 
-  isValidField(fieldName: string): boolean | null {
-    return (
-      !!this.myForm.controls[fieldName].errors &&
-      this.myForm.controls[fieldName].touched
-    );
-  }
-  getFieldError(fieldName: string): string | null {
-    if (!this.myForm.controls[fieldName]) return null;
+  // isValidField(fieldName: string): boolean | null {
+  //   return (
+  //     !!this.myForm.controls[fieldName].errors &&
+  //     this.myForm.controls[fieldName].touched
+  //   );
+  // }
+  // getFieldError(fieldName: string): string | null {
+  //   if (!this.myForm.controls[fieldName]) return null;
 
-    const errors = this.myForm.controls[fieldName].errors ?? {};
+  //   const errors = this.myForm.controls[fieldName].errors ?? {};
 
-    for (const key of Object.keys(errors)) {
-      switch (key) {
-        case 'required':
-          return 'Este campo es requerido';
-        case 'minlength':
-          return `Este campo debe tener al menos ${errors[key].requiredLength} caracteres`;
-        case 'min':
-          return `Este campo debe ser mayor a ${errors[key].min}`;
-      }
-    }
-    return null;
-  }
+  //   for (const key of Object.keys(errors)) {
+  //     switch (key) {
+  //       case 'required':
+  //         return 'Este campo es requerido';
+  //       case 'minlength':
+  //         return `Este campo debe tener al menos ${errors[key].requiredLength} caracteres`;
+  //       case 'min':
+  //         return `Este campo debe ser mayor a ${errors[key].min}`;
+  //     }
+  //   }
+  //   return null;
+  // }
 
   onSave(): void {
     if (this.myForm.invalid) {
