@@ -24,7 +24,12 @@
     <label class="col-sm-3 col-form-label">Agregar</label>
     <div class="col-sm-9">
       <div class="input-group">
-        <input class="form-control" placeholder="Agregar favorito" />
+        <input
+          class="form-control"
+          placeholder="Agregar favorito"
+          [formControl]="newFavorite"
+          (keydown.enter)="onAddToFavorite()"
+        />
 
         <button class="btn btn-outline-primary" type="button">
           Agregar favorito
@@ -37,28 +42,41 @@
   <div class="mb-3 row">
     <label class="col-sm-3 col-form-label">Favoritos</label>
     <div class="col-sm-9" formArrayName="favoriteGames">
-      @for (favoriteGames of getFavoriteGames().controls; track $index; let i =
+      @for (favoriteGames of getFavoriteGames.controls; track $index; let i =
       $index) {
       <div class="mb-1">
         <div class="input-group">
           <input class="form-control" [formControlName]="i" />
 
-          <button class="btn btn-outline-danger" type="button">Eliminar</button>
+          <button
+            class="btn btn-outline-danger"
+            type="button"
+            (click)="deleteFavorite(i)"
+          >
+            Eliminar
+          </button>
         </div>
-        @if (formUtils.isValidFieldInArray(getFavoriteGames(), i)) {
+        @if (formUtils.isValidFieldInArray(getFavoriteGames, i)) {
         <span class="form-text text-danger"
-          >{{ formUtils.getFieldErrorInArray(getFavoriteGames(), i) }}
+          >{{ formUtils.getFieldErrorInArray(getFavoriteGames, i) }}
         </span>
         }
       </div>
       }
     </div>
+
+    @if (formUtils.isValidField(myForm, 'favoriteGames')) {
+    <span class="form-text text-danger">Tener al menos 4 juegos</span>
+    }
   </div>
 
   <div class="row">
     <div class="col-sm-12">
-      <button type="submit" class="btn btn-primary float-end">
-        <!-- [disabled]="myForm.invalid" -->
+      <button
+        type="submit"
+        class="btn btn-primary float-end"
+        [disabled]="myForm.invalid"
+      >
         Guardar
       </button>
     </div>
@@ -74,5 +92,5 @@
 <br />
 
 <span>Agregar Juego</span>
-<!-- <pre>{{ "object" | json }}</pre>
-<pre>{{ "object" | json }}</pre> -->
+<pre>{{ myForm.controls["favoriteGames"].errors | json }}</pre>
+<pre>{{ myForm.controls["favoriteGames"].value | json }}</pre>

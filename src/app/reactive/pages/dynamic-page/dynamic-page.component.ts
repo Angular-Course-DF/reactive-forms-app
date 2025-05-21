@@ -4,6 +4,7 @@ import { Component, inject } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
+  FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
@@ -31,17 +32,38 @@ export class DynamicPageComponent {
     ),
   });
 
-  getFavoriteGames() {
+  // newFavorite = this.fb.control('', [
+  //   Validators.required,
+  //   Validators.minLength(3),
+  // ]);
+
+  newFavorite = new FormControl('', [
+    Validators.required,
+    Validators.minLength(3),
+  ]);
+
+  get getFavoriteGames() {
     return this.myForm.get('favoriteGames') as FormArray;
   }
 
-  // isValidFieldInArray(formArray: FormArray, index: number) {
-  //   return (
-  //     formArray.controls[index].errors && formArray.controls[index].touched
-  //   );
-  // }
+  onAddToFavorite() {
+    if (this.newFavorite.invalid) return;
+    const newGame = this.newFavorite.value;
+
+    //**agregar nuevo valor al form array */
+    this.getFavoriteGames.push(
+      this.fb.control(newGame, [Validators.required, Validators.minLength(3)])
+    );
+
+    this.newFavorite.reset();
+  }
+
+  deleteFavorite(index: number) {
+    this.getFavoriteGames.removeAt(index);
+  }
 
   onSubmit() {
+    this.myForm.markAllAsTouched();
     if (this.myForm.valid) {
       console.log(this.myForm.value);
     } else {
