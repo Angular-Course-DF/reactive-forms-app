@@ -110,6 +110,15 @@
 
       <div class="row">
         <div class="col">
+          @if (registerForm.errors && registerForm.touched) {
+          <!-- <span class="form-text text-danger">
+            mensaje de error del email
+          </span> -->
+          <span class="form-text text-danger">
+            <!-- {{ formUtils.getFieldError(registerForm, "email") }} -->
+            Las contraseñas deben de ser iguales
+          </span>
+          }
           <button
             class="btn btn-primary float-end"
             type="submit"

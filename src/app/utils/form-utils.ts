@@ -1,4 +1,9 @@
-import { FormArray, FormGroup, ValidationErrors } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormGroup,
+  ValidationErrors,
+} from '@angular/forms';
 
 export class FormUtils {
   //Expresiones regulares
@@ -8,15 +13,7 @@ export class FormUtils {
 
   static getErrorMessage(errors: ValidationErrors) {
     console.log('Errores de validación:', errors);
-    /**
-    {
-      "pattern": {
-        "requiredPattern": "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$",
-        "actualValue": "dfssdfsdf"
-      }
-    }
 
-     */
     for (const key of Object.keys(errors)) {
       switch (key) {
         case 'required':
@@ -63,5 +60,17 @@ export class FormUtils {
 
     const errors = formArray.controls[index].errors ?? {};
     return this.getErrorMessage(errors);
+  }
+
+  static isFieldOneEqualToFieldTwo(field: string, field2: string) {
+    /**
+     * * AbstractControl nos permite acceder a los valores de los campos del formulario
+     * * y a sus validaciones
+     */
+    return (formGroup: AbstractControl) => {
+      const field1Value = formGroup.get(field)?.value; // *puede que el valor no exista o este nulo en ese momento
+      const field2Value = formGroup.get(field2)?.value; // *puede que el valor no exista o este nulo en ese momento
+      return field1Value === field2Value ? null : { passwordsNotEqual: true };
+    };
   }
 }
