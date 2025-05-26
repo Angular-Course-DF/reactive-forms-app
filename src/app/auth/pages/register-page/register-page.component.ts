@@ -21,7 +21,8 @@ export class RegisterPageComponent {
       ],
       email: [
         '',
-        [Validators.required, Validators.pattern(FormUtils.emailPattern)],
+        [Validators.required, Validators.pattern(FormUtils.emailPattern)], // Validaciones sincronas
+        [FormUtils.checkingServerResponse],
       ],
       username: [
         '',

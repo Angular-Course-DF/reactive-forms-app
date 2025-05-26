@@ -24,6 +24,8 @@ export class FormUtils {
           return `Valor mínimo de ${errors[key].min}`;
         case 'email':
           return `El valor ingresado no es un correo electrónico válido.`;
+        case 'emailTaken':
+          return `El correo electrónico ya está siendo usado por otro usuario.`;
         case 'pattern':
           if (errors['pattern'].requiredPattern === this.emailPattern) {
             return `El valor ingresado no parece un correo electrónico válido..`;
@@ -73,4 +75,24 @@ export class FormUtils {
       return field1Value === field2Value ? null : { passwordsNotEqual: true };
     };
   }
+
+  static async checkingServerResponse(
+    control: AbstractControl
+  ): Promise<ValidationErrors | null> {
+    console.log('validando email en el servidor...');
+    await sleep(); // Simula una espera de 2 segundos para simular una llamada al servidor
+    const formValue = control.value;
+    if (formValue === 'hola@mundo.com') {
+      return { emailTaken: true };
+    }
+    return null;
+  }
+}
+
+async function sleep() {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(true);
+    }, 2000);
+  });
 }
