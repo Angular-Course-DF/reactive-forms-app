@@ -1,7 +1,22 @@
 import { FormArray, FormGroup, ValidationErrors } from '@angular/forms';
 
 export class FormUtils {
+  //Expresiones regulares
+  static namePattern = '([a-zA-Z]+) ([a-zA-Z]+)';
+  static emailPattern = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
+  static notOnlySpacesPattern = '^[a-zA-Z0-9]+$';
+
   static getErrorMessage(errors: ValidationErrors) {
+    console.log('Errores de validación:', errors);
+    /**
+    {
+      "pattern": {
+        "requiredPattern": "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$",
+        "actualValue": "dfssdfsdf"
+      }
+    }
+
+     */
     for (const key of Object.keys(errors)) {
       switch (key) {
         case 'required':
@@ -12,6 +27,13 @@ export class FormUtils {
           return `Valor mínimo de ${errors[key].min}`;
         case 'email':
           return `El valor ingresado no es un correo electrónico válido.`;
+        case 'pattern':
+          if (errors['pattern'].requiredPattern === this.emailPattern) {
+            return `El valor ingresado no parece un correo electrónico válido..`;
+          }
+          return 'Error de patrón contra expresión regular';
+        default:
+          return `Error de validación no controlado: ${key}`;
       }
     }
     return null;

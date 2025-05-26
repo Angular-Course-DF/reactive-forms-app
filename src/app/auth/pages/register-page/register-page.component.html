@@ -11,16 +11,15 @@
           <input
             type="text"
             class="form-control"
-            placeholder="Nombre del usuario"
+            placeholder="Nombre y apellido"
             formControlName="name"
           />
           @if (formUtils.isValidField(registerForm, 'name')) {
-          <span class="form-text text-danger"
-            >{{ formUtils.getFieldError(registerForm, "name") }}
+
+          <span class="form-text text-danger">
+            El campo debe tener nombre y apellido
+            <!-- {{ formUtils.getFieldError(registerForm, "name") }} -->
           </span>
-          <!-- <span class="form-text text-danger">
-            Debe de ser en formato de nombre y apellido
-          </span> -->
           }
         </div>
       </div>
