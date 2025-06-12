@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { combineLatest, Observable, of } from 'rxjs';
 import { Country } from '../interfaces/country.interface';
 
 @Injectable({ providedIn: 'root' })
@@ -27,7 +27,20 @@ export class CountryService {
     return this.http.get<Country>(`${url}`);
   }
 
-  getCountryBordersByCodes(borders: string[]) {
-    //TODO: Implementar la lógica para obtener los países fronterizos
+  getCountryNamesByCodeArray(counrtyCodes: string[]): Observable<Country[]> {
+    if (!counrtyCodes || counrtyCodes.length === 0) return of([]);
+
+    const countriesRequests: Observable<Country>[] = [];
+
+    counrtyCodes.forEach((code) => {
+      const request = this.getCountryByAlphaCode(code);
+
+      countriesRequests.push(request);
+    });
+
+    // combineLatest espera a que todos los observables se completen
+    // y devuelve un array con los resultados de cada uno de ellos
+    // Si alguno de los observables falla, el observable combinado fallará también
+    return combineLatest(countriesRequests);
   }
 }
